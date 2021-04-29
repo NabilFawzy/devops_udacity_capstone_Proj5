@@ -23,7 +23,7 @@ jobs:
             . virtualenv/bin/activate
             make install
             make lint
-  build:
+  building:
     machine: true
     working_directory: ~/app
     steps:
@@ -31,7 +31,7 @@ jobs:
       - run:
           name: Build, tag and push docker image to docker.io
           command: |
-            docker login -u ${DOCKER_USER} -p ${DOCKER_PWD}
+            docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
             docker build -t 01141942205/devopsproject5:${CIRCLE_WORKFLOW_ID:0:7} .
             docker push 01141942205/devopsproject5:${CIRCLE_WORKFLOW_ID:0:7}
             docker tag 01141942205/devopsproject5:${CIRCLE_WORKFLOW_ID:0:7} 01141942205/devopsproject5:latest
@@ -81,3 +81,6 @@ workflows:
   deployment:
     jobs:
       - linting
+      - building:
+          requires:
+            - "linting"
