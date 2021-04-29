@@ -29,7 +29,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build, tag and push docker image to docker.io
+          name: Docker-configuration
           command: |
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
             docker build -t 01141942205/devopsproject5:${CIRCLE_WORKFLOW_ID:0:7} .
@@ -37,7 +37,7 @@ jobs:
             docker tag 01141942205/devopsproject5:${CIRCLE_WORKFLOW_ID:0:7} 01141942205/devopsproject5:latest
             docker push 01141942205/devopsproject5:latest
   
-  create-deployment:
+  deploying:
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -52,10 +52,10 @@ jobs:
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
-          resource-file-path: appdeployment.yml
+          resource-file-path: deployment.yml
           resource-name: deployment/devopsproject5
 
-  test-cluster:
+  testing:
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -84,3 +84,13 @@ workflows:
       - building:
           requires:
             - "linting"
+      - aws-eks/create-cluster:
+          cluster-name: devopsproject5
+      - deploying:
+          cluster-name: devopsproject5
+          requires:
+            - aws-eks/create-cluster
+      - testing:
+          cluster-name: devopsproject5
+          requires:
+            - deploying
