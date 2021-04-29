@@ -88,6 +88,8 @@ workflows:
             - "linting"
       - aws-eks/create-cluster:
           cluster-name: devopsproject5
+          requires:
+            - building
       - deploying:
           cluster-name: devopsproject5
           requires:
