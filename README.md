@@ -17,6 +17,7 @@ Project :
      kubernetes: circleci/kubernetes@0.11.2
 
 Steps:
+
     1) Linting : 
        install required packages
        create VENV
