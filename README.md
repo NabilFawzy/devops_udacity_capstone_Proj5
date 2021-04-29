@@ -22,11 +22,15 @@ Steps:
        create VENV
        install app
        Verify by lint the application ready for deploying
+       
     2) Building : 
        Login into docker and create docker for build and push
-    3) create cluster using eks
+       
+    3) create cluster using eks 
+
     4) Deploying:
        deploy app into cluster
+
     5) Testing:
     test cluster created well
        
